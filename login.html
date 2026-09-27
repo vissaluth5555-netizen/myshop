@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - MYSHOP</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f8f5ff; padding: 20px; }
+    .login-container { display: flex; width: 100%; max-width: 1000px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(155, 77, 255, 0.15); }
+    .left-side { flex: 1; background: linear-gradient(135deg, #ff4d8d, #9b4dff); position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 40px; color: white; min-height: 560px; }
+    .left-side::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.12) 0%, transparent 40%); pointer-events: none; }
+    .logo { font-size: 28px; font-weight: 800; letter-spacing: 1px; z-index: 1; }
+    .welcome-text { z-index: 1; margin-bottom: 40px; }
+    .welcome-text h1 { font-size: 48px; font-weight: 800; line-height: 1.1; }
+    .right-side { flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+    .right-side h2 { font-size: 32px; font-weight: 700; color: #1f2937; margin-bottom: 8px; }
+    .subtitle { color: #6b7280; font-size: 15px; margin-bottom: 35px; }
+    .form-group { margin-bottom: 22px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; color: #4b5563; margin-bottom: 8px; }
+    .form-group input { width: 100%; padding: 14px 16px; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: 15px; outline: none; background: #fafafa; }
+    .form-group input:focus { border-color: #9b4dff; background: white; box-shadow: 0 0 0 4px rgba(155, 77, 255, 0.12); }
+    .login-btn { width: 100%; padding: 15px; background: linear-gradient(90deg, #ff4d8d, #9b4dff); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(155, 77, 255, 0.35); }
+    .login-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .forgot-link { text-align: right; margin-top: -10px; margin-bottom: 20px; }
+    .forgot-link a { color: #9b4dff; font-size: 13px; text-decoration: none; font-weight: 500; }
+    .signup-link { text-align: center; margin-top: 28px; font-size: 14px; color: #6b7280; }
+    .signup-link a { color: #9b4dff; font-weight: 600; text-decoration: none; }
+    @media (max-width: 800px) {
+      .login-container { flex-direction: column; max-width: 440px; }
+      .left-side { min-height: 220px; padding: 30px; justify-content: center; text-align: center; }
+      .welcome-text h1 { font-size: 36px; }
+      .right-side { padding: 40px 30px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="left-side">
+      <div class="logo">MYSHOP</div>
+      <div class="welcome-text"><h1>Welcome<br>Back!</h1></div>
+    </div>
+    <div class="right-side">
+      <h2>Login</h2>
+      <p class="subtitle">សូម Login ដើម្បីចូលគណនីរបស់អ្នក</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+        <div class="forgot-link">
+          <a href="#" id="forgotPassword">ភ្លេច Password?</a>
+        </div>
+        <button type="submit" class="login-btn" id="loginBtn">Login</button>
+      </form>
+      <div class="signup-link">អ្នកថ្មី? <a href="signup.html">Signup</a></div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script>
+   const firebaseConfig = {
+  apiKey: "AIzaSyD5RLQZCt7c12zqwo4mn8AU5phbv6fmpLI",
+  authDomain: "mynewshop-3fcb7.firebaseapp.com",
+  databaseURL: "https://mynewshop-3fcb7-default-rtdb.firebaseio.com",
+  projectId: "mynewshop-3fcb7",
+  storageBucket: "mynewshop-3fcb7.firebasestorage.app",
+  messagingSenderId: "914506490670",
+  appId: "1:914506490670:web:817b0339ee0c98fba690bf",
+  measurementId: "G-BNDH72ZH11"
+};
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const ADMIN_EMAILS = ["vissaluth5555@gmail.com"];
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        if (ADMIN_EMAILS.includes((user.email || '').toLowerCase())) {
+          window.location.href = 'admin.html';
+        } else {
+          window.location.href = 'index.html';
+        }
+      }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('loginBtn');
+
+      btn.disabled = true;
+      btn.textContent = 'កំពុង Login...';
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+      } catch (error) {
+        alert('❌ Email ឬ Password មិនត្រឹមត្រូវ');
+        btn.disabled = false;
+        btn.textContent = 'Login';
+      }
+    });
+
+    document.getElementById('forgotPassword').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        alert('សូមបញ្ចូល Email ជាមុន');
+        return;
+      }
+      try {
+        await auth.sendPasswordResetEmail(email);
+        alert('✅ បានផ្ញើ Link Reset Password ទៅ Email របស់អ្នកហើយ!');
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    });
+  </script>
+</body>
+</html>

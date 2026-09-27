@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MYSHOP - Dell Store</title>
+  
+  <!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600;700&family=Siemreap&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+ * { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  font-family: 'Fredoka', 'Siemreap', 'Noto Sans Khmer', sans-serif; 
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 14px;
+  padding: 12px 18px;
+  box-shadow: 0 6px 20px rgba(155,77,255,0.12);
+}
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 4px 10px;
+  background: transparent;
+}
+.search-box i {
+  font-size: 16px;
+}
+.cart-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cart-btn i {
+  font-size: 16px;
+}
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logout-btn i {
+  font-size: 14px;
+}
+.categories {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  overflow-x: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+  scrollbar-width: none;           /* Firefox */
+  -ms-overflow-style: none;        /* IE */
+}
+.categories::-webkit-scrollbar {
+  display: none;                   /* Chrome, Safari, Edge */
+}
+    
+    body { background: #f8f5ff; min-height: 100vh; color: #333; }
+    
+    .header { background: linear-gradient(90deg, #ff4d8d, #9b4dff); padding: 14px 20px; color: white; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(155,77,255,0.25); }
+    .logo { font-size: 24px; font-weight: 800; }
+    .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .cart-btn { background: white; color: #9b4dff; border: none; padding: 9px 16px; border-radius: 10px; font-weight: 700; cursor: pointer; position: relative; }
+    .cart-count { position: absolute; top: -8px; right: -8px; background: #ff4d8d; color: white; font-size: 12px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+
+    .search-wrapper { max-width: 1200px; margin: 20px auto 0; padding: 0 16px; }
+    .search-box { display: flex; align-items: center; background: white; border-radius: 14px; padding: 12px 18px; box-shadow: 0 6px 20px rgba(155,77,255,0.12); }
+    .search-box input { flex: 1; border: none; outline: none; font-size: 16px; padding: 4px 10px; background: transparent; }
+
+   
+    .cat-btn { background: white; border: 2px solid #e5e7eb; padding: 10px 20px; border-radius: 30px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cat-btn.active, .cat-btn:hover { background: linear-gradient(90deg, #ff4d8d, #9b4dff); color: white; border-color: transparent; }
+
+    .container { max-width: 1200px; margin: 0 auto 40px; padding: 0 16px; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+    
+    .product-card { background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 25px rgba(155,77,255,0.1); transition: 0.25s; display: flex; flex-direction: column; }
+    .product-card:hover { transform: translateY(-6px); }
+    .product-img { width: 100%; height: 200px; object-fit: contain; background: #f8fafc; padding: 15px; }
+    .product-info { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+    .product-category { font-size: 12px; color: #9b4dff; font-weight: 600; margin-bottom: 6px; }
+    .product-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .product-desc { font-size: 13px; color: #666; margin-bottom: 12px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .product-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+    .product-price { font-size: 18px; font-weight: 800; color: #9b4dff; }
+    .add-cart-btn { background: linear-gradient(90deg, #ff4d8d, #9b4dff); color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+    .out-of-stock { background: #ccc !important; cursor: not-allowed; }
+
+    .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; opacity: 0; visibility: hidden; transition: 0.3s; }
+    .cart-overlay.show { opacity: 1; visibility: visible; }
+    .cart-sidebar { position: fixed; top: 0; right: -420px; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 210; transition: 0.3s; display: flex; flex-direction: column; }
+    .cart-sidebar.open { right: 0; }
+    .cart-header { background: linear-gradient(90deg, #ff4d8d, #9b4dff); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .close-cart { background: none; border: none; color: white; font-size: 28px; cursor: pointer; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 20px; }
+    .cart-item { display: flex; gap: 14px; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #eee; }
+    .cart-item img { width: 70px; height: 70px; object-fit: contain; background: #f8fafc; border-radius: 10px; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-weight: 700; font-size: 14px; }
+    .cart-item-price { color: #9b4dff; font-weight: 700; }
+    .qty-control { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+    .qty-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #ddd; background: #f8f5ff; font-weight: 700; cursor: pointer; }
+    .remove-item { color: #ef4444; background: none; border: none; font-size: 13px; cursor: pointer; margin-top: 6px; }
+    .cart-footer { padding: 20px; border-top: 1px solid #eee; }
+    .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+    .checkout-btn { width: 100%; background: linear-gradient(90deg, #ff4d8d, #9b4dff); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .empty-cart { text-align: center; padding: 60px 20px; color: #888; }
+
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 300; padding: 20px; }
+    .modal.hidden { display: none; }
+    .modal-card { background: white; border-radius: 20px; width: 100%; max-width: 420px; overflow: hidden; }
+    .modal-header { background: linear-gradient(90deg, #ff4d8d, #9b4dff); color: white; padding: 20px; text-align: center; }
+    .modal-body { padding: 25px; }
+    .btn-main { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-bottom: 10px; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-secondary { background: #e2e8f0; color: #333; }
+    .qr-box { text-align: center; }
+    .qr-box img { max-width: 240px; border-radius: 12px; background: white; padding: 10px; }
+    .status-text { text-align: center; margin-top: 12px; font-weight: 600; min-height: 24px; }
+
+    .receipt-card { background: white; border-radius: 20px; width: 100%; max-width: 400px; overflow: hidden; }
+    .receipt-header { background: linear-gradient(90deg, #ff4d8d, #9b4dff); color: white; padding: 25px; text-align: center; }
+    .receipt-body { padding: 25px; }
+    .receipt-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+    .receipt-total { background: #f8f5ff; padding: 14px; border-radius: 12px; display: flex; justify-content: space-between; font-weight: 800; color: #9b4dff; margin-top: 15px; }
+    .receipt-close { width: 100%; background: linear-gradient(90deg, #ff4d8d, #9b4dff); color: white; border: none; padding: 14px; font-weight: 700; cursor: pointer; }
+
+    @media (max-width: 600px) {
+      .header { padding: 10px 12px; }
+      .logo { font-size: 18px; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .product-img { height: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">MYSHOP</div>
+    <div class="header-right">
+     <button class="cart-btn" onclick="openCart()">
+  <i class="fa-solid fa-cart-shopping"></i> Cart
+  <span class="cart-count" id="cartCount">0</span>
+</button>
+     <button class="logout-btn" id="logoutBtn">
+  <i class="fa-solid fa-right-from-bracket"></i> Logout
+</button>
+    </div>
+  </div>
+
+ <div class="search-wrapper">
+  <div class="search-box">
+    <i class="fa-solid fa-magnifying-glass" style="color:#9b4dff; margin-right:10px;"></i>
+    <input type="text" id="searchInput" placeholder="ស្វែងរកផលិតផល..." oninput="handleSearch()">
+  </div>
+</div>
+
+  <div class="categories" id="categories"></div>
+
+  <div class="container">
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+
+  <!-- Cart -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button class="close-cart" onclick="closeCart()">×</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn" onclick="checkout()">Checkout</button>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>បង់ប្រាក់</h2>
+      </div>
+      <div class="modal-body">
+        <div class="qr-box" id="qrBox">
+          <p style="margin-bottom: 12px; font-weight: 600;" id="paymentAmountText">សរុប: $0.00</p>
+          <img id="qrImage" src="" alt="KHQR">
+          <p style="margin: 12px 0; color: #666;">ស្កេន QR ដើម្បីទូទាត់</p>
+          <button class="btn-main btn-success" id="checkPaymentBtn" onclick="checkPayment()">ខ្ញុំបានទូទាត់រួច</button>
+          <button class="btn-main btn-secondary" onclick="closePayment()">បោះបង់</button>
+        </div>
+        <div class="status-text" id="paymentStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Receipt Modal -->
+  <div id="receiptModal" class="modal hidden">
+    <div class="receipt-card">
+      <div class="receipt-header">
+        <div style="font-size:42px;margin-bottom:8px;">✅</div>
+        <h2>Order Successful!</h2>
+        <p id="receiptTime"></p>
+      </div>
+      <div class="receipt-body">
+        <div id="receiptItems"></div>
+        <div class="receipt-total">
+          <span>Total Paid</span>
+          <span id="r-total">$0.00</span>
+        </div>
+      </div>
+      <button class="receipt-close" onclick="closeReceipt()">Close</button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script>
+    const WORKER_URL = "https://wild-flower-04c0.ing88138.workers.dev";
+
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5RLQZCt7c12zqwo4mn8AU5phbv6fmpLI",
+      authDomain: "mynewshop-3fcb7.firebaseapp.com",
+      databaseURL: "https://mynewshop-3fcb7-default-rtdb.firebaseio.com",
+      projectId: "mynewshop-3fcb7",
+      storageBucket: "mynewshop-3fcb7.firebasestorage.app",
+      messagingSenderId: "914506490670",
+      appId: "1:914506490670:web:817b0339ee0c98fba690bf",
+      measurementId: "G-BNDH72ZH11"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    let currentUser = null;
+    let currentUsername = "";
+    let products = [];
+    let cart = JSON.parse(localStorage.getItem('myshop_cart') || '[]');
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let currentPaymentId = null;
+    let isCheckingPayment = false;
+    let pendingOrder = null;
+
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        alert('សូម Login មុន!');
+        window.location.href = 'login.html';
+        return;
+      }
+      currentUser = user;
+      loadUserData();
+      loadProducts();
+    });
+
+    function loadUserData() {
+      db.ref('users/' + currentUser.uid).once('value').then(snap => {
+        if (snap.exists()) {
+          const data = snap.val();
+          currentUsername = data.username || currentUser.email;
+        }
+      });
+    }
+
+    function loadProducts() {
+  db.ref('products').once('value').then(snap => {
+    const data = snap.val() || {};
+    products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+
+    // តម្រៀបតាមលេខ # Order (សំខាន់!)
+    products.sort((a, b) => (a.order || 9999) - (b.order || 9999));
+
+    renderCategories();
+    renderProducts();
+    updateCartUI();
+  });
+}
+
+    function renderCategories() {
+      const cats = ['all', ...new Set(products.map(p => p.category).filter(Boolean))];
+      document.getElementById('categories').innerHTML = cats.map(cat => 
+        `<button class="cat-btn ${cat === currentCategory ? 'active' : ''}" onclick="filterCategory('${cat}')">${cat === 'all' ? 'All' : cat}</button>`
+      ).join('');
+    }
+
+    function filterCategory(cat) {
+      currentCategory = cat;
+      renderCategories();
+      renderProducts();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('productsGrid');
+      let list = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
+      if (searchQuery) {
+        list = list.filter(p => {
+          const name = (p.name || '').toLowerCase();
+          const category = (p.category || '').toLowerCase();
+          const description = (p.description || '').toLowerCase();
+          return name.includes(searchQuery) || category.includes(searchQuery) || description.includes(searchQuery);
+        });
+      }
+      if (list.length === 0) {
+        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:60px;color:#888;">No products found</p>`;
+        return;
+      }
+      grid.innerHTML = list.map(p => `
+        <div class="product-card">
+          <img src="${p.image || 'https://via.placeholder.com/300x200?text=Dell'}" class="product-img" alt="${p.name}">
+          <div class="product-info">
+            <div class="product-category">${p.category || 'Dell'}</div>
+            <div class="product-name">${p.name}</div>
+            <div class="product-desc">${p.description || ''}</div>
+            <div class="product-footer">
+              <div class="product-price">$${parseFloat(p.price).toFixed(2)}</div>
+              <button class="add-cart-btn ${p.stock <= 0 ? 'out-of-stock' : ''}" onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''}>
+                ${p.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== CART =====
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product || product.stock <= 0) return;
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        if (existing.qty >= product.stock) return alert('Not enough stock!');
+        existing.qty++;
+      } else {
+        cart.push({ id: product.id, name: product.name, price: parseFloat(product.price), image: product.image, qty: 1 });
+      }
+      saveCart();
+      updateCartUI();
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+      saveCart();
+      updateCartUI();
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(i => i.id !== id);
+      saveCart();
+      updateCartUI();
+    }
+
+    function saveCart() {
+      localStorage.setItem('myshop_cart', JSON.stringify(cart));
+    }
+
+    function updateCartUI() {
+      const count = cart.reduce((sum, i) => sum + i.qty, 0);
+      document.getElementById('cartCount').textContent = count;
+      const container = document.getElementById('cartItems');
+      if (cart.length === 0) {
+        container.innerHTML = `<div class="empty-cart">Your cart is empty</div>`;
+        document.getElementById('cartTotal').textContent = '$0.00';
+        document.getElementById('checkoutBtn').disabled = true;
+        return;
+      }
+      document.getElementById('checkoutBtn').disabled = false;
+      let total = 0;
+      container.innerHTML = cart.map(item => {
+        total += item.price * item.qty;
+        return `
+          <div class="cart-item">
+            <img src="${item.image || 'https://via.placeholder.com/70'}" alt="">
+            <div class="cart-item-info">
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
+                <span>${item.qty}</span>
+                <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+              </div>
+              <button class="remove-item" onclick="removeFromCart('${item.id}')">Remove</button>
+            </div>
+          </div>`;
+      }).join('');
+      document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+    }
+
+    function openCart() {
+      document.getElementById('cartOverlay').classList.add('show');
+      document.getElementById('cartSidebar').classList.add('open');
+    }
+    function closeCart() {
+      document.getElementById('cartOverlay').classList.remove('show');
+      document.getElementById('cartSidebar').classList.remove('open');
+    }
+
+    // ===== CHECKOUT + PAYMENT =====
+    async function checkout() {
+      if (cart.length === 0) return;
+
+      const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      if (total < 0.5) {
+        alert('តម្លៃសរុបត្រូវមានយ៉ាងហោចណាស់ $0.50');
+        return;
+      }
+
+      if (!confirm(`Confirm order total $${total.toFixed(2)}?\nអ្នកនឹងត្រូវស្កេន QR ដើម្បីទូទាត់`)) return;
+
+      const btn = document.getElementById('checkoutBtn');
+      btn.disabled = true;
+      btn.textContent = 'កំពុងបង្កើត QR...';
+
+      try {
+        const res = await fetch(`${WORKER_URL}/create-payment`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: total.toFixed(2) })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || data.error || 'បរាជ័យក្នុងការបង្កើត QR');
+
+        currentPaymentId = data.id;
+        pendingOrder = {
+          items: [...cart],
+          total: total
+        };
+
+        document.getElementById('paymentAmountText').textContent = `សរុប: $${total.toFixed(2)}`;
+        document.getElementById('qrImage').src = data.qr_link;
+        document.getElementById('paymentStatus').innerText = '';
+        document.getElementById('paymentModal').classList.remove('hidden');
+        closeCart();
+
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Checkout';
+      }
+    }
+
+    async function checkPayment() {
+      if (!currentPaymentId || !pendingOrder) return;
+      if (isCheckingPayment) return;
+
+      isCheckingPayment = true;
+      const checkBtn = document.getElementById('checkPaymentBtn');
+      checkBtn.disabled = true;
+      checkBtn.textContent = 'កំពុងពិនិត្យ...';
+      showPaymentStatus('កំពុងពិនិត្យការទូទាត់...', '#f59e0b');
+
+      try {
+        const res = await fetch(`${WORKER_URL}/check-status?id=${currentPaymentId}`);
+        const data = await res.json();
+
+        if (data.status === 'paid' || data.status === 'approved') {
+          // បង្កើត Order
+          await db.ref('orders').push({
+            uid: currentUser.uid,
+            username: currentUsername,
+            email: currentUser.email,
+            items: pendingOrder.items,
+            total: pendingOrder.total,
+            paymentId: currentPaymentId,
+            status: 'paid',
+            createdAt: firebase.database.ServerValue.TIMESTAMP
+          });
+
+         // ផ្ញើទៅ Worker (សុវត្ថិភាព)
+await fetch(`${WORKER_URL}/notify-order`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    username: currentUsername,
+    email: currentUser.email,
+    items: pendingOrder.items,
+    total: pendingOrder.total
+  })
+});
+
+          showPaymentStatus('✅ ទូទាត់ជោគជ័យ!', '#22c55e');
+
+          setTimeout(() => {
+            showReceipt(pendingOrder.items, pendingOrder.total);
+            closePayment();
+            cart = [];
+            saveCart();
+            updateCartUI();
+            pendingOrder = null;
+            currentPaymentId = null;
+          }, 1500);
+
+        } else if (data.status === 'expired' || data.status === 'failed') {
+          showPaymentStatus('❌ ការទូទាត់បរាជ័យ ឬផុតកំណត់', 'red');
+        } else {
+          showPaymentStatus('មិនទាន់ទូទាត់ទេ (ស្ថានភាព: ' + (data.status || 'pending') + ')', '#f59e0b');
+        }
+      } catch (err) {
+        showPaymentStatus('Error: ' + err.message, 'red');
+      } finally {
+        isCheckingPayment = false;
+        checkBtn.disabled = false;
+        checkBtn.textContent = 'ខ្ញុំបានទូទាត់រួច';
+      }
+    }
+
+    async function sendToTelegram(order) {
+      let itemsText = order.items.map(item => 
+        `• ${item.name} x${item.qty} = $${(item.price * item.qty).toFixed(2)}`
+      ).join('\n');
+
+      const message = `
+🛒 *ការបញ្ជាទិញថ្មី!*
+
+👤 អ្នកទិញ: ${currentUsername}
+📧 Email: ${currentUser.email}
+
+📦 ទំនិញ:
+${itemsText}
+
+💰 សរុប: *$${order.total.toFixed(2)}*
+🕒 ម៉ោង: ${new Date().toLocaleString('km-KH')}
+      `.trim();
+
+      try {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown'
+          })
+        });
+      } catch (err) {
+        console.error('Telegram Error:', err);
+      }
+    }
+
+    function closePayment() {
+      document.getElementById('paymentModal').classList.add('hidden');
+      currentPaymentId = null;
+    }
+
+    function showPaymentStatus(msg, color) {
+      const el = document.getElementById('paymentStatus');
+      el.innerText = msg;
+      el.style.color = color;
+    }
+
+    function showReceipt(items, total) {
+      document.getElementById('receiptTime').textContent = new Date().toLocaleString();
+      document.getElementById('r-total').textContent = '$' + total.toFixed(2);
+      document.getElementById('receiptItems').innerHTML = items.map(i => 
+        `<div class="receipt-row"><span>${i.name} × ${i.qty}</span><span>$${(i.price * i.qty).toFixed(2)}</span></div>`
+      ).join('');
+      document.getElementById('receiptModal').classList.remove('hidden');
+    }
+
+    function closeReceipt() {
+      document.getElementById('receiptModal').classList.add('hidden');
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      auth.signOut().then(() => window.location.href = 'login.html');
+    });
+
+    updateCartUI();
+  </script>
+</body>
+</html>
